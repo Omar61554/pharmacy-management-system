@@ -1,0 +1,106 @@
+@startuml
+' Set up styling
+skinparam packageStyle rectangle
+
+' Packages and classes
+
+package "app" {
+  class Main
+}
+
+package "controller" {
+  class BranchController
+  class OrderController
+  class MedicineController
+}
+
+package "model.person" {
+  abstract class Person
+  class Manager
+  class Pharmacist
+  class Cashier
+  class Customer
+  class OnlineCustomer
+  class OfflineCustomer
+}
+
+package "model.product" {
+  class Medicine
+}
+
+package "model.order" {
+  class Order
+  class Payment
+}
+
+package "model.pharmacy" {
+  class PharmacyBranch
+}
+
+package "service.medicine" {
+  class MedicineService
+}
+
+package "service.branch" {
+  class BranchService
+}
+
+package "service.order" {
+  class OrderService
+}
+
+package "dao" {
+  class MedicineDAO
+}
+
+package "api" {
+  class MedicineAPIClient
+  class MedicineMapper
+  class APIMedicineDTO
+}
+
+package "gui" {
+  class AdminDashboard
+  class CashierDashboard
+  class PharmacistDashboard
+}
+
+package "storage" {
+  class Storage
+}
+
+package "recipe" {
+  class Recipe
+}
+
+package "util" {
+  class MedicineSorter
+  class Validator
+}
+
+' Inheritance
+Person <|-- Manager
+Person <|-- Pharmacist
+Person <|-- Cashier
+Person <|-- Customer
+Customer <|-- OnlineCustomer
+Customer <|-- OfflineCustomer
+
+' Relationships
+Order --> "0..*" Medicine
+Order --> Customer
+Order --> Payment
+PharmacyBranch --> "0..*" Person
+PharmacyBranch --> "0..*" Order
+PharmacyBranch --> "0..*" Medicine
+
+MedicineService --> MedicineDAO
+MedicineService --> MedicineAPIClient
+MedicineMapper --> APIMedicineDTO
+MedicineMapper --> Medicine
+
+MedicineController --> MedicineService
+OrderController --> OrderService
+BranchController --> BranchService
+
+@enduml
