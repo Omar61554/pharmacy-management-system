@@ -97,8 +97,8 @@ Person <|-- PharmacyWorker
 MedicineService ..|> IMedicineService
 
 ' Relationships
-Order --> "1" Customer
-Order --> "1..*" Medicine
+Order -->  Customer
+Order -->  Medicine
 MedicineController --> MedicineService
 MedicineService --> MedicineDAO
 AdminPage --> MedicineController
