@@ -1,79 +1,31 @@
 @echo off
+REM filepath: b:\omar\semester8\Advanced programming\Project\create_structure.bat
 
-:: Base directory
-set BASE=pharmacy-management-system
+REM Base directory for the project
+set BASE_DIR=b:\omar\semester8\Advanced programming\Project
 
-:: Main application
-mkdir %BASE%\app
-echo. > %BASE%\app\Main.java
+REM Create directories for packages
+mkdir "%BASE_DIR%\app"
+mkdir "%BASE_DIR%\controller"
+mkdir "%BASE_DIR%\model"
+mkdir "%BASE_DIR%\service"
+mkdir "%BASE_DIR%\dao"
+mkdir "%BASE_DIR%\gui"
 
-:: Controllers
-mkdir %BASE%\controller
-echo. > %BASE%\controller\BranchController.java
-echo. > %BASE%\controller\OrderController.java
-echo. > %BASE%\controller\MedicineController.java
+REM Create Java files
+echo package app; > "%BASE_DIR%\app\Main.java"
+echo package controller; > "%BASE_DIR%\controller\MedicineController.java"
+echo package model; > "%BASE_DIR%\model\Person.java"
+echo package model; > "%BASE_DIR%\model\Customer.java"
+echo package model; > "%BASE_DIR%\model\PharmacyWorker.java"
+echo package model; > "%BASE_DIR%\model\Medicine.java"
+echo package model; > "%BASE_DIR%\model\Order.java"
+echo package service; > "%BASE_DIR%\service\IMedicineService.java"
+echo package service; > "%BASE_DIR%\service\MedicineService.java"
+echo package dao; > "%BASE_DIR%\dao\MedicineDAO.java"
+echo package gui; > "%BASE_DIR%\gui\AdminPage.java"
+echo package gui; > "%BASE_DIR%\gui\ServicePage.java"
 
-:: Models - split into sub-packages
-mkdir %BASE%\model\person
-echo. > %BASE%\model\person\Person.java
-echo. > %BASE%\model\person\Manager.java
-echo. > %BASE%\model\person\Pharmacist.java
-echo. > %BASE%\model\person\Cashier.java
-echo. > %BASE%\model\person\Customer.java
-echo. > %BASE%\model\person\OnlineCustomer.java
-echo. > %BASE%\model\person\OfflineCustomer.java
-
-mkdir %BASE%\model\product
-echo. > %BASE%\model\product\Medicine.java
-
-mkdir %BASE%\model\order
-echo. > %BASE%\model\order\Order.java
-echo. > %BASE%\model\order\Payment.java
-
-mkdir %BASE%\model\pharmacy
-echo. > %BASE%\model\pharmacy\PharmacyBranch.java
-
-:: Services - optionally split by domain
-mkdir %BASE%\service\medicine
-echo. > %BASE%\service\medicine\MedicineService.java
-
-mkdir %BASE%\service\branch
-echo. > %BASE%\service\branch\BranchService.java
-
-mkdir %BASE%\service\order
-echo. > %BASE%\service\order\OrderService.java
-
-:: DAO
-mkdir %BASE%\dao
-echo. > %BASE%\dao\MedicineDAO.java
-
-:: API
-mkdir %BASE%\api
-echo. > %BASE%\api\MedicineAPIClient.java
-echo. > %BASE%\api\MedicineMapper.java
-echo. > %BASE%\api\APIMedicineDTO.java
-
-:: GUI
-mkdir %BASE%\gui
-echo. > %BASE%\gui\AdminDashboard.java
-echo. > %BASE%\gui\CashierDashboard.java
-echo. > %BASE%\gui\PharmacistDashboard.java
-
-:: Recipe
-mkdir %BASE%\recipe
-echo. > %BASE%\recipe\Recipe.java
-
-:: Storage
-mkdir %BASE%\storage
-echo. > %BASE%\storage\Storage.java
-
-:: Utilities
-mkdir %BASE%\util
-echo. > %BASE%\util\MedicineSorter.java
-echo. > %BASE%\util\Validator.java
-
-:: Resources
-mkdir %BASE%\resources
-echo. > %BASE%\resources\config.properties
-
-echo Project structure created successfully.
+REM Notify user
+echo All folders and files have been created successfully.
+pause
