@@ -53,7 +53,13 @@ Service mode is used for customers to view and purchase medicines.
 ## 🎥 GUI Demo
 
 <!-- Option 2: Embed locally stored video (GitHub doesn't support direct playback, but users can download) -->
-📽️ [Click here to watch the demo video]([docs/demo.mp4](https://github.com/user-attachments/assets/abadb6ad-97d9-4374-bd65-9c63bbbc7111))
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/ac09b17e-f281-4d17-8d0a-f093e959f1e9
+">
+    <img src="assets/thumbnail.png" alt="Watch the video" width="600"/>
+  </a>
+</p>
+
 
 ---
 
