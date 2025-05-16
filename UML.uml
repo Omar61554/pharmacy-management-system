@@ -108,13 +108,19 @@ package model {
         + getEmail() : String
         + getPhoneNumber() : String
         + getDetails() : String
+        + calculateDiscount(double originalAmount) : double
     }
 
     class Customer {
         - orderHistory : List<Order>
+        - isPremiumMember : boolean
         + Customer(int, String, String, String)
         + placeOrder(order : Order) : void
         + getOrderHistory() : List<Order>
+        + calculateDiscount(double originalAmount) : double
+        + setPremiumMember(boolean isPremiumMember) : void
+    };
+    
     }
 
     class PharmacyWorker {
@@ -122,6 +128,7 @@ package model {
         + PharmacyWorker(int, String, String, String, String)
         + manageInventory() : void
         + assistCustomer(customer : Customer) : void
+        + calculateDiscount(double originalAmount) : double
     }
 
     class Order {
