@@ -81,7 +81,7 @@ To run the application:
 
 ## 🙌 Contributors
 
-- Omar Khaled Ahmed
-- Mohamed Alaa Abdelkareem
-- Marwan Mahmoud Ali
-- Omar Emad El Din Hassan
+- @Omar61554
+- @mohamed-alaa32
+- @MarwanMahmoud02
+- @OmarEmad04
