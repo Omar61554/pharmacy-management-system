@@ -1,126 +1,133 @@
 @startuml
-' Set up styling
-skinparam packageStyle rectangle
 
-' Packages and Classes
+package app {
+    class App {
+        - scene : Scene
+        - primaryStage : Stage
+        + start(Stage) : void
+        + showStartPage() : void
+        + showLoginPage() : void
+        + showAdminMainPage() : void
+        + showServicePage() : void
+        + showMedicineControlPage() : void
+        + showPharmacyWorkersPage() : void
+        + showOrdersPage() : void
+        + main(String[]) : void
+    }
 
-package "app" {
-  class Main {
-    + main(args: String[]): void
-  }
+    class StartPage {
+        - root : BorderPane
+        + StartPage()
+        + getRoot() : BorderPane
+    }
+
+    class AdminPage {
+        - loginRoot : BorderPane
+        - mainRoot : BorderPane
+        + AdminPage()
+        + getLoginRoot() : BorderPane
+        + getMainRoot() : BorderPane
+    }
+
+    class ServicePage {
+        - root : BorderPane
+        + ServicePage()
+        + getRoot() : BorderPane
+    }
+
+    class MedicineControlPage {
+        - root : BorderPane
+        - medicineController : MedicineController
+        + MedicineControlPage()
+        + getRoot() : BorderPane
+        + addMedicine(Medicine) : void
+        + updateMedicine(Medicine) : void
+        + deleteMedicine(int) : void
+        + viewMedicine(int) : void
+    }
+
+    class PharmacyWorkersPage {
+        - root : BorderPane
+        + PharmacyWorkersPage()
+        + getRoot() : BorderPane
+    }
+
+    class OrdersPage {
+        - root : BorderPane
+        + OrdersPage()
+        + getRoot() : BorderPane
+    }
+
+    class AppUtils {
+        + createLogo(width : double, alignment : String) : ImageView
+    }
 }
 
-package "controller" {
-  class MedicineController {
-    + addMedicine(medicine: Medicine): void
-    + updateMedicine(medicine: Medicine): void
-    + deleteMedicine(id: int): void
-    + getMedicine(id: int): Medicine
-    + listAllMedicines(): List<Medicine>
-  }
+package controller {
+    class MedicineController {
+        - medicineDAO : MedicineDAO
+        + MedicineController(medicineDAO : MedicineDAO)
+        + addMedicine(medicine : Medicine) : boolean
+        + updateMedicine(medicine : Medicine) : boolean
+        + deleteMedicine(medicineId : int) : boolean
+        + getMedicine(medicineId : int) : Medicine
+        + listAllMedicines() : List<Medicine>
+    }
 }
 
-package "model" {
-  abstract class Person {
-    - id: int
-    - name: String
-    - email: String
-    - phoneNumber: String
-    + getDetails(): String
-  }
-  class Customer {
-    + placeOrder(order: Order): void
-    + getOrderHistory(): List<Order>
-  }
-  class PharmacyWorker {
-    - role: String
-    + manageInventory(): void
-    + assistCustomer(customer: Customer): void
-  }
-  class Medicine {
-    - id: int
-    - name: String
-    - price: double
-    - expirationDate: Date
-    - stockQuantity: int
-    + getDetails(): String
-    + isExpired(): boolean
-  }
-  class Order {
-    - id: int
-    - customer: Customer
-    - medicines: List<Medicine>
-    - orderDate: Date
-    + calculateTotal(): double
-    + getOrderDetails(): String
-  }
+package dao {
+    class MedicineDAO {
+        - medicines : List<Medicine>
+        - nextId : int
+        + MedicineDAO()
+        + addMedicine(medicine : Medicine) : boolean
+        + updateMedicine(medicine : Medicine) : boolean
+        + deleteMedicine(medicineId : int) : boolean
+        + getMedicine(medicineId : int) : Medicine
+        + listAllMedicines() : List<Medicine>
+    }
 }
 
-package "service" {
-  interface IMedicineService {
-    + fetchAllMedicines(): List<Medicine>
-    + fetchMedicineById(id: int): Medicine
-  }
-  class MedicineService implements IMedicineService {
-    + fetchAllMedicines(): List<Medicine>
-    + fetchMedicineById(id: int): Medicine
-    + checkMedicineStock(id: int): int
-  }
+package model {
+    class Medicine {
+        - id : int
+        - name : String
+        - price : double
+        - expirationDate : Date
+        - stockQuantity : int
+        + Medicine()
+        + Medicine(id : int, name : String, price : double, expirationDate : Date, stockQuantity : int)
+        + getId() : int
+        + setId(id : int) : void
+        + getName() : String
+        + setName(name : String) : void
+        + getPrice() : double
+        + setPrice(price : double) : void
+        + getExpirationDate() : Date
+        + setExpirationDate(expirationDate : Date) : void
+        + getStockQuantity() : int
+        + setStockQuantity(stockQuantity : int) : void
+        + getDetails() : String
+        + isExpired() : boolean
+    }
 }
-
-package "dao" {
-  class MedicineDAO {
-    + save(medicine: Medicine): void
-    + update(medicine: Medicine): void
-    + delete(id: int): void
-    + findById(id: int): Medicine
-    + findAll(): List<Medicine>
-  }
-}
-
-package "gui" {
-
-  class App {
-    + displayServiceDashboard(): void
-    + assistCustomer(): void
-    + manageInventory(): void
-  }
-
-  class AdminPage {
-    + displayAdminDashboard(): void
-    + manageUsers(): void
-    + viewReports(): void
-  }
-  class ServicePage {
-    + displayServiceDashboard(): void
-    + assistCustomer(): void
-    + manageInventory(): void
-  }
-
-   class StartPage {
-    + displayServiceDashboard(): void
-    + assistCustomer(): void
-    + manageInventory(): void
-  }
-
-  class AppUtils{
-    + displayServiceDashboard(): void
-    + assistCustomer(): void
-    + manageInventory(): void
-  }
-}
-
-' Inheritance
-Person <|-- Customer
-Person <|-- PharmacyWorker
-MedicineService ..|> IMedicineService
 
 ' Relationships
-Order -->  Customer
-Order -->  Medicine
-MedicineController --> MedicineService
-MedicineService --> MedicineDAO
-AdminPage --> MedicineController
-ServicePage --> MedicineController
+App --> StartPage
+App --> AdminPage
+App --> ServicePage
+App --> MedicineControlPage
+App --> PharmacyWorkersPage
+App --> OrdersPage
+
+StartPage ..> AppUtils
+AdminPage ..> AppUtils
+ServicePage ..> AppUtils
+MedicineControlPage ..> AppUtils
+
+MedicineControlPage --> controller.MedicineController
+controller.MedicineController --> dao.MedicineDAO
+controller.MedicineController --> model.Medicine
+dao.MedicineDAO --> model.Medicine
 
 @enduml

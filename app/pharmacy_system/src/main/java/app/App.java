@@ -1,5 +1,7 @@
 package app;
 
+import controller.MedicineController;
+import dao.MedicineDAO;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -10,6 +12,8 @@ public class App extends Application {
 
     private static Scene scene;
     private static Stage primaryStage;
+    public static final MedicineDAO medicineDAO = new MedicineDAO();
+    public static final MedicineController medicineController = new MedicineController(medicineDAO);
 
     @Override
     public void start(Stage stage) {
@@ -40,6 +44,7 @@ public class App extends Application {
 
     public static void showServicePage() {
         ServicePage servicePage = new ServicePage();
+        servicePage.refresh();
         scene.setRoot(servicePage.getRoot());
         primaryStage.setTitle("Service Page");
     }
