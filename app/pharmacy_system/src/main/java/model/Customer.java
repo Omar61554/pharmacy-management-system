@@ -23,13 +23,6 @@ public class Customer extends Person {
         super(id, name, email, phoneNumber);
     }
 
-<<<<<<< HEAD
-    /**
-     * Adds an order to the customer's order history.
-     *
-     * @param order The order to be placed.
-     */
-=======
     @Override
     public double calculateDiscount(double originalAmount) {
         // Premium members get 15% discount, regular get 5%
@@ -41,7 +34,6 @@ public class Customer extends Person {
         this.isPremiumMember = isPremiumMember;
     }
     
->>>>>>> dd421fb1c781900ae90ec8b2a485b8c164849b0a
     public void placeOrder(Order order) {
         orderHistory.add(order);
     }

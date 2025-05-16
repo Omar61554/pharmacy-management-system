@@ -19,7 +19,7 @@ public class AppUtils {
      */
     public static HBox createLogo(int size, String alignment) {
         // Load the logo image from the resources folder
-        Image logoImage = new Image("file:src/main/resources/logo.png");
+        Image logoImage = new Image(App.class.getResourceAsStream("Dark_Turquoise_Simple_Medicine_Negative_Space_Logo-removebg-preview.png"));
         // Create an ImageView to display the image
         ImageView logoView = new ImageView(logoImage);
         // Set the desired size for the ImageView

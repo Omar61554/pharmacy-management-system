@@ -1,11 +1,10 @@
 package app;
 
-import controller.MedicineController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,153 +12,204 @@ import model.Medicine;
 import model.MedicineLiquid;
 import model.MedicinePills;
 
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 
 /**
- * Represents the Service page of the pharmacy system.
- * This page allows users (customers) to view available medicines and their details.
+ * Represents the Service Page for customers to view and buy medicines.
+ * Displays a searchable, sortable table of medicines with type information.
  */
 public class ServicePage {
-
     // The root layout for this page
     private BorderPane root;
-    // TableView to display the list of medicines
-    private TableView<Medicine> medicineTable;
-    // ObservableList to hold the data for the TableView
-    private ObservableList<Medicine> medicineData;
-    // The controller for handling medicine-related business logic
-    private MedicineController medicineController = App.medicineController;
+    // Table to display medicines
+    private TableView<Medicine> table;
+    // Observable list backing the table
+    private ObservableList<Medicine> displayedMedicines;
 
     /**
-     * Constructs a new ServicePage.
-     * Initializes the UI elements, sets up the medicine table, and loads initial data.
+     * Constructs the ServicePage, sets up the UI and loads medicines.
      */
     public ServicePage() {
         root = new BorderPane();
-        // Add the application logo to the top-left
-        root.setTop(AppUtils.createLogo(100, "left"));
 
-        // Container for the main content (table and controls)
-        VBox container = new VBox(10); // 10 pixels spacing
-        container.setStyle("-fx-padding: 20;"); // Add padding
+        // --- Logo at top left ---
+        HBox logoBox = new HBox(AppUtils.createLogo(200, "center"));
+        logoBox.setAlignment(Pos.TOP_CENTER);
+        logoBox.setPadding(new Insets(0, 0, 0, 0));
+        root.setTop(logoBox);
 
-        // Initialize the TableView
-        medicineTable = new TableView<>();
-        // Initialize the ObservableList
-        medicineData = FXCollections.observableArrayList();
-        // Set the data source for the table
-        medicineTable.setItems(medicineData);
+        // --- Search bar setup ---
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search medicine by name...");
 
-        // --- Define Table Columns ---
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> searchMedicine(searchField.getText()));
 
+        HBox searchBox = new HBox(10, searchField, searchButton);
+        searchBox.setPadding(new Insets(10));
+        searchBox.setAlignment(Pos.CENTER);
+
+        // --- Table and data setup ---
+        table = new TableView<>();
+        displayedMedicines = FXCollections.observableArrayList();
+        table.setItems(displayedMedicines);
+        configureTable();
+
+        // --- Buy button setup ---
+        Button buyButton = new Button("Buy Selected");
+        buyButton.setOnAction(e -> buySelectedMedicine());
+
+        // --- Back button setup ---
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> App.showStartPage());
+
+        // --- Layout container for controls and table ---
+        VBox container = new VBox(10, searchBox, table, buyButton, backButton);
+        container.setPadding(new Insets(20));
+        container.setStyle("-fx-alignment: center;");
+
+        root.setCenter(container);
+
+        // --- Load medicines initially ---
+        showAllMedicines();
+    }
+
+    /**
+     * Configures the columns of the medicine table, including type.
+     */
+    private void configureTable() {
         // ID Column
-        TableColumn<Medicine, Integer> idColumn = new TableColumn<>("ID");
-        // Associate this column with the "id" property of the Medicine object
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Medicine, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
+        idCol.setPrefWidth(60);
 
         // Name Column
-        TableColumn<Medicine, String> nameColumn = new TableColumn<>("Name");
-        // Associate this column with the "name" property
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Medicine, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getName()));
+        nameCol.setPrefWidth(150);
 
         // Price Column
-        TableColumn<Medicine, Double> priceColumn = new TableColumn<>("Price");
-        // Associate this column with the "price" property
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        // Expiration Date Column
-        TableColumn<Medicine, String> expColumn = new TableColumn<>("Expiration Date");
-        // Use a custom cell value factory to format the Date object
-        expColumn.setCellValueFactory(cellData -> {
-            Date date = cellData.getValue().getExpirationDate();
-            // Format the date as a string (e.g., yyyy-MM-dd)
-            return new javafx.beans.property.SimpleStringProperty(
-                    new java.text.SimpleDateFormat("yyyy-MM-dd").format(date));
-        });
+        TableColumn<Medicine, Number> priceCol = new TableColumn<>("Price");
+        priceCol.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getPrice()));
+        priceCol.setPrefWidth(80);
 
         // Stock Quantity Column
-        TableColumn<Medicine, Integer> stockColumn = new TableColumn<>("Stock");
-        // Associate this column with the "stockQuantity" property
-        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
+        TableColumn<Medicine, Number> stockCol = new TableColumn<>("Stock");
+        stockCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getStockQuantity()));
+        stockCol.setPrefWidth(80);
 
-        // Type Column (Displays "Liquid" or "Pills")
-        TableColumn<Medicine, String> typeColumn = new TableColumn<>("Type");
-        // Use a custom cell value factory to determine the type string
-        typeColumn.setCellValueFactory(cellData -> {
-            Medicine medicine = cellData.getValue();
-            if (medicine instanceof MedicineLiquid) {
-                return new javafx.beans.property.SimpleStringProperty("Liquid");
-            } else if (medicine instanceof MedicinePills) {
-                return new javafx.beans.property.SimpleStringProperty("Pills");
-            }
-            return new javafx.beans.property.SimpleStringProperty("Unknown"); // Fallback
+        // Expiry Date Column
+        TableColumn<Medicine, String> expiryCol = new TableColumn<>("Expiry Date");
+        expiryCol.setCellValueFactory(data -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return new javafx.beans.property.SimpleStringProperty(sdf.format(data.getValue().getExpirationDate()));
         });
+        expiryCol.setPrefWidth(120);
 
-        // Specific Detail Column (Displays Volume for Liquid, Pill Count for Pills)
-        TableColumn<Medicine, String> specificColumn = new TableColumn<>("Specific Detail");
-        // Use a custom cell value factory to get the type-specific detail
-        specificColumn.setCellValueFactory(cellData -> {
-            Medicine medicine = cellData.getValue();
-            if (medicine instanceof MedicineLiquid) {
-                // Display volume for liquid medicine
-                return new javafx.beans.property.SimpleStringProperty(
-                        ((MedicineLiquid) medicine).getVolume() + " ml");
-            } else if (medicine instanceof MedicinePills) {
-                // Display pill count for pill medicine
-                return new javafx.beans.property.SimpleStringProperty(
-                        ((MedicinePills) medicine).gettPillCount() + " pills");
+        // Type Column (Liquid or Pills)
+        TableColumn<Medicine, String> typeCol = new TableColumn<>("Type");
+        typeCol.setCellValueFactory(data -> {
+            Medicine med = data.getValue();
+            String type = "Unknown";
+            if (med instanceof MedicineLiquid) {
+                type = "Liquid";
+            } else if (med instanceof MedicinePills) {
+                type = "Pills";
             }
-            return new javafx.beans.property.SimpleStringProperty(""); // Empty string for unknown types
+            return new javafx.beans.property.SimpleStringProperty(type);
         });
+        typeCol.setPrefWidth(80);
 
-
-        // Add all defined columns to the table
-        medicineTable.getColumns().addAll(idColumn, nameColumn, priceColumn, expColumn, stockColumn, typeColumn, specificColumn);
-
-        // Add the table to the main container
-        container.getChildren().add(medicineTable);
-
-        // Back button to return to the start page
-        Button backButton = new Button("Back");
-        backButton.setOnAction(e -> App.showStartPage()); // Set action to show start page
-
-        // HBox to position the back button at the bottom right
-        HBox backBox = new HBox(backButton);
-        backBox.setAlignment(Pos.BOTTOM_RIGHT);
-        backBox.setStyle("-fx-padding: 10;"); // Add padding around the back button
-
-        // Set the main container in the center and the back button at the bottom
-        root.setCenter(container);
-        root.setBottom(backBox);
-
-        // Load initial data into the table
-        loadMedicineData();
+        // Add all columns to the table
+        table.getColumns().clear();
+        table.getColumns().addAll(idCol, nameCol, priceCol, stockCol, expiryCol, typeCol);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     /**
-     * Loads medicine data from the controller and populates the TableView.
+     * Searches for medicines by name and updates the table.
+     * @param keyword The search keyword.
      */
-    private void loadMedicineData() {
-        // Clear existing data in the observable list
-        medicineData.clear();
-        // Get the list of all medicines from the controller
-        List<Medicine> medicines = medicineController.listAllMedicines();
-        // Add all retrieved medicines to the observable list
-        medicineData.addAll(medicines);
+    private void searchMedicine(String keyword) {
+        displayedMedicines.clear();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            showAllMedicines();
+            return;
+        }
+        List<Medicine> allMeds = App.medicineController.listAllMedicines();
+        allMeds.sort(Comparator.comparing(Medicine::getName, String.CASE_INSENSITIVE_ORDER));
+        Medicine toSelect = null;
+        for (Medicine med : allMeds) {
+            if (med.getName() != null && med.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                displayedMedicines.add(med);
+                if (med.getName().equalsIgnoreCase(keyword)) {
+                    toSelect = med;
+                }
+            }
+        }
+        if (toSelect != null) {
+            table.getSelectionModel().select(toSelect);
+        } else if (!displayedMedicines.isEmpty()) {
+            table.getSelectionModel().select(0);
+        }
     }
 
     /**
-     * Refreshes the data displayed in the medicine table.
-     * This method should be called when the ServicePage is shown to ensure the data is up-to-date.
+     * Loads and displays all medicines in the table.
+     */
+    private void showAllMedicines() {
+        displayedMedicines.clear();
+        List<Medicine> allMeds = App.medicineController.listAllMedicines();
+        allMeds.sort(Comparator.comparing(Medicine::getName, String.CASE_INSENSITIVE_ORDER));
+        displayedMedicines.addAll(allMeds);
+    }
+
+    /**
+     * Refreshes the table data.
      */
     public void refresh() {
-        loadMedicineData();
+        showAllMedicines();
     }
 
     /**
-     * Gets the root layout of the Service page.
-     *
-     * @return The BorderPane root.
+     * Handles the buying of the selected medicine.
+     * Decreases stock and updates the table.
+     */
+    private void buySelectedMedicine() {
+        Medicine selected = table.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showError("Please select a medicine to buy.");
+            return;
+        }
+        if (selected.getStockQuantity() <= 0) {
+            showError("This medicine is out of stock.");
+            return;
+        }
+        selected.updateQuantity(-1);
+        App.medicineController.updateMedicine(selected);
+        showAllMedicines();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "You have bought 1 unit of " + selected.getName() + ".");
+        alert.setHeaderText("Purchase Successful");
+        alert.showAndWait();
+    }
+
+    /**
+     * Shows an error dialog with the given message.
+     * @param msg The error message.
+     */
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Operation Failed");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+    /**
+     * Returns the root BorderPane for this page.
+     * @return The root BorderPane.
      */
     public BorderPane getRoot() {
         return root;

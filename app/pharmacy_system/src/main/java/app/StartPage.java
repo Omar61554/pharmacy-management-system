@@ -21,7 +21,7 @@ public class StartPage {
         // Initialize the root BorderPane
         root = new BorderPane();
         // Add the application logo to the top-left of the page
-        root.setTop(AppUtils.createLogo(100, "left"));
+        root.setTop(AppUtils.createLogo(300, "center"));
 
         // Create a VBox container to hold the navigation buttons
         VBox container = new VBox(20); // 20 pixels spacing between buttons
