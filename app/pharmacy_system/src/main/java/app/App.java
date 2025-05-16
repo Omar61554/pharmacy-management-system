@@ -44,6 +44,12 @@ public class App extends Application {
         primaryStage.setTitle("Service Page");
     }
 
+    public static void showMedicineControlPage() {
+        MedicineControlPage medicineControlPage = new MedicineControlPage();
+        scene.setRoot(medicineControlPage.getRoot());
+        primaryStage.setTitle("Medicine Control Page");
+    }
+
     public static void main(String[] args) {
         launch();
     }

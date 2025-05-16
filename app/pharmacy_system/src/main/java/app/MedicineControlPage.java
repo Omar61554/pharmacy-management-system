@@ -1,15 +1,18 @@
 package app;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ServicePage {
+public class MedicineControlPage {
+
     private BorderPane root;
 
-    public ServicePage() {
+    public MedicineControlPage() {
         root = new BorderPane();
         root.setTop(AppUtils.createLogo(100, "left"));
 
@@ -17,17 +20,18 @@ public class ServicePage {
         container.setStyle("-fx-alignment: center; -fx-padding: 20;");
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> App.showStartPage());
+        backButton.setOnAction(e -> App.showAdminMainPage());
 
-          HBox backBoxMain = new HBox(backButton);
-        backBoxMain.setAlignment(Pos.BOTTOM_RIGHT);
-        backBoxMain.setStyle("-fx-padding: 10;");
-        root.setBottom(backBoxMain);
+        HBox backBox = new HBox(backButton);
+        backBox.setAlignment(Pos.BOTTOM_RIGHT);
+        backBox.setStyle("-fx-padding: 10;");
+
+        root.setBottom(backBox);
         root.setCenter(container);
-
     }
 
     public BorderPane getRoot() {
         return root;
     }
+    
 }

@@ -1,9 +1,11 @@
 package app;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class AdminPage {
@@ -46,18 +48,34 @@ public class AdminPage {
         passwordField.setOnAction(e -> loginAction.run());
         backButton.setOnAction(e -> App.showStartPage());
 
-        container.getChildren().addAll(passwordField, loginButton, backButton);
+        container.getChildren().addAll(passwordField, loginButton);
+
+        // Back button at bottom right
+
+        container.getChildren().add(backButton);
         loginRoot.setCenter(container);
 
         // Main Admin Page
         mainRoot = new BorderPane();
         mainRoot.setTop(AppUtils.createLogo(100, "left"));
-        VBox adminContainer = new VBox(10);
+
+        VBox adminContainer = new VBox(20);
         adminContainer.setStyle("-fx-alignment: center; -fx-padding: 20;");
+
+        Button medicineControlBtn = new Button("Medicine Control");
+        medicineControlBtn.setOnAction(e -> App.showMedicineControlPage());
+
+        adminContainer.getChildren().add(medicineControlBtn);
+
+        // Back button at bottom right for main page
         Button backBtn = new Button("Back");
         backBtn.setOnAction(e -> App.showStartPage());
-        adminContainer.getChildren().add(backBtn);
+        HBox backBoxMain = new HBox(backBtn);
+        backBoxMain.setAlignment(Pos.BOTTOM_RIGHT);
+        backBoxMain.setStyle("-fx-padding: 10;");
+
         mainRoot.setCenter(adminContainer);
+        mainRoot.setBottom(backBoxMain);
     }
 
     public BorderPane getLoginRoot() {

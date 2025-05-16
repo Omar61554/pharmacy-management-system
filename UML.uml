@@ -79,12 +79,31 @@ package "dao" {
 }
 
 package "gui" {
+
+  class App {
+    + displayServiceDashboard(): void
+    + assistCustomer(): void
+    + manageInventory(): void
+  }
+
   class AdminPage {
     + displayAdminDashboard(): void
     + manageUsers(): void
     + viewReports(): void
   }
   class ServicePage {
+    + displayServiceDashboard(): void
+    + assistCustomer(): void
+    + manageInventory(): void
+  }
+
+   class StartPage {
+    + displayServiceDashboard(): void
+    + assistCustomer(): void
+    + manageInventory(): void
+  }
+
+  class AppUtils{
     + displayServiceDashboard(): void
     + assistCustomer(): void
     + manageInventory(): void
