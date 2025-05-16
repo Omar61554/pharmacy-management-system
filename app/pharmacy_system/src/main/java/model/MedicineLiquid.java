@@ -1,9 +1,9 @@
 
 package model; 
 import java.util.Date;
-import java.io.Serializable;
 
-public class MedicineLiquid implements Serializable, Medicine {
+
+public class MedicineLiquid implements Medicine {
     private static final long serialVersionUID = 1L;  // Add this version UID
     
     private int id;
@@ -13,15 +13,8 @@ public class MedicineLiquid implements Serializable, Medicine {
     private int stockQuantity;
     private int volume;
 
-    // public MedicinePills(String name, double price, Date expirationDate, int stockQuantity) {
-    //     this.id = 0;
-    //     this.name = name;
-    //     this.price = price;
-    //     this.expirationDate = expirationDate;
-    //     this.stockQuantity = stockQuantity;
-    // }
     
-    MedicineLiquid(int id, String name, double price, Date expirationDate, int stockQuantity, int volume) {
+    public MedicineLiquid(int id, String name, double price, Date expirationDate, int stockQuantity, int volume) {
         this.id = id;
         this.name = name;
         this.price = price;

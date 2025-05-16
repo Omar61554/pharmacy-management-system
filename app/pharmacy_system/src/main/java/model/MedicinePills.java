@@ -1,8 +1,7 @@
 package model; 
 import java.util.Date;
-import java.io.Serializable;
 
-public class MedicinePills implements Serializable, Medicine {
+public class MedicinePills implements Medicine {
     private static final long serialVersionUID = 1L;  // Add this version UID
     
     private int id;
