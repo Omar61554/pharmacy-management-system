@@ -60,16 +60,6 @@ Service mode is used for customers to view and purchase medicines.
 
 ---
 
-## 📁 Directory Structure
-
-pharmacy_system/
-└── src/
-└── main/
-└── java/
-└── [Your packages and classes]
-
----
-
 ## ✅ Technologies Used
 
 - Java (OOP)
