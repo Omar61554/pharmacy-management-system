@@ -94,63 +94,70 @@ public class MedicineControlPage {
         dialog.getDialogPane().getButtonTypes().addAll(addType, ButtonType.CANCEL);
 
         Button addBtn = (Button) dialog.getDialogPane().lookupButton(addType);
-        addBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-            // Check for empty fields
-            if (idField.getText().trim().isEmpty() ||
-                nameField.getText().trim().isEmpty() ||
-                priceField.getText().trim().isEmpty() ||
-                expField.getText().trim().isEmpty() ||
-                stockField.getText().trim().isEmpty() ||
-                extraField.getText().trim().isEmpty()) {
-                showError("All fields must be filled.");
-                event.consume();
-                return;
-            }
-            // Check data types and date validity
-            try {
-                Integer.parseInt(idField.getText());
-            } catch (NumberFormatException e) {
-                showError("ID must be an integer.");
-                event.consume();
-                return;
-            }
-            try {
-                Double.parseDouble(priceField.getText());
-            } catch (NumberFormatException e) {
-                showError("Price must be a number.");
-                event.consume();
-                return;
-            }
-            try {
-                int stock = Integer.parseInt(stockField.getText());
-                if (stock < 0) {
-                    showError("Stock quantity must be a non-negative integer.");
-                    event.consume();
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                showError("Stock quantity must be an integer.");
-                event.consume();
-                return;
-            }
-            try {
-                Date exp = new SimpleDateFormat("yyyy-MM-dd").parse(expField.getText());
-                if (exp.before(new Date())) {
-                    showError("Expiration date cannot be before today.");
-                    event.consume();
-                }
-            } catch (Exception ex) {
-                showError("Invalid date format. Please use yyyy-MM-dd.");
-                event.consume();
-                return;
-            }
-            try {
-                Integer.parseInt(extraField.getText());
-            } catch (NumberFormatException e) {
-                showError(("Liquid".equals(typeCombo.getValue()) ? "Volume" : "Pill count") + " must be an integer.");
-                event.consume();
-            }
-        });
+     addBtn.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+    // Check for empty fields
+    if (idField.getText().trim().isEmpty() ||
+        nameField.getText().trim().isEmpty() ||
+        priceField.getText().trim().isEmpty() ||
+        expField.getText().trim().isEmpty() ||
+        stockField.getText().trim().isEmpty() ||
+        extraField.getText().trim().isEmpty()) {
+        showError("All fields must be filled.");
+        event.consume();
+        return;
+    }
+    // Check data types and date validity
+    int id = -1;
+    try {
+        id = Integer.parseInt(idField.getText());
+    } catch (NumberFormatException e) {
+        showError("ID must be an integer.");
+        event.consume();
+        return;
+    }
+    // Check for unique ID
+    if (medicineController.getMedicine(id) != null) {
+        showError("ID already exists. Please enter a unique ID.");
+        event.consume();
+        return;
+    }
+    try {
+        Double.parseDouble(priceField.getText());
+    } catch (NumberFormatException e) {
+        showError("Price must be a number.");
+        event.consume();
+        return;
+    }
+    try {
+        int stock = Integer.parseInt(stockField.getText());
+        if (stock < 0) {
+            showError("Stock quantity must be a non-negative integer.");
+            event.consume();
+            return;
+        }
+    } catch (NumberFormatException e) {
+        showError("Stock quantity must be an integer.");
+        event.consume();
+        return;
+    }
+    try {
+        Date exp = new SimpleDateFormat("yyyy-MM-dd").parse(expField.getText());
+        if (exp.before(new Date())) {
+            showError("Expiration date cannot be before today.");
+            event.consume();
+        }
+    } catch (Exception ex) {
+        showError("Invalid date format. Please use yyyy-MM-dd.");
+        event.consume();
+        return;
+    }
+    try {
+        Integer.parseInt(extraField.getText());
+    } catch (NumberFormatException e) {
+        showError(("Liquid".equals(typeCombo.getValue()) ? "Volume" : "Pill count") + " must be an integer.");
+        event.consume();
+    }
+});
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addType) {

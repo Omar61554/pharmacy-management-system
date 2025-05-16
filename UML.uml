@@ -31,8 +31,16 @@ package app {
 
     class ServicePage {
         - root : BorderPane
+        - table : TableView<Medicine>
+        - displayedMedicines : ObservableList<Medicine>
         + ServicePage()
         + getRoot() : BorderPane
+        + refresh() : void
+        - configureTable() : void
+        - searchMedicine(keyword : String) : void
+        - showAllMedicines() : void
+        - buySelectedMedicine() : void
+        - showError(msg : String) : void
     }
 
     class MedicineControlPage {
@@ -89,27 +97,102 @@ package dao {
 }
 
 package model {
-    class Medicine {
+    abstract class Person {
+        - id : int
+        - name : String
+        - email : String
+        - phoneNumber : String
+        + Person(int, String, String, String)
+        + getId() : int
+        + getName() : String
+        + getEmail() : String
+        + getPhoneNumber() : String
+        + getDetails() : String
+    }
+
+    class Customer {
+        - orderHistory : List<Order>
+        + Customer(int, String, String, String)
+        + placeOrder(order : Order) : void
+        + getOrderHistory() : List<Order>
+    }
+
+    class PharmacyWorker {
+        - role : String
+        + PharmacyWorker(int, String, String, String, String)
+        + manageInventory() : void
+        + assistCustomer(customer : Customer) : void
+    }
+
+    class Order {
+        - id : int
+        - customer : Customer
+        - medicines : List<Medicine>
+        - orderDate : Date
+        + Order(int, Customer, List<Medicine>, Date)
+        + calculateTotal() : double
+        + getOrderDetails() : String
+    }
+
+    interface Medicine {
+        + getId() : int
+        + getName() : String
+        + getPrice() : double
+        + getExpirationDate() : Date
+        + getStockQuantity() : int
+        + setId(id : int) : void
+        + updateQuantity(quantity : int) : void
+        + getDetails() : String
+        + isExpired() : boolean
+    }
+
+    class MedicineLiquid {
         - id : int
         - name : String
         - price : double
         - expirationDate : Date
         - stockQuantity : int
-        + Medicine()
-        + Medicine(id : int, name : String, price : double, expirationDate : Date, stockQuantity : int)
+        - volume : int
+        + MedicineLiquid(int, String, double, Date, int, int)
         + getId() : int
-        + setId(id : int) : void
         + getName() : String
-        + setName(name : String) : void
         + getPrice() : double
-        + setPrice(price : double) : void
         + getExpirationDate() : Date
-        + setExpirationDate(expirationDate : Date) : void
         + getStockQuantity() : int
-        + setStockQuantity(stockQuantity : int) : void
+        + getVolume() : int
+        + setId(int) : void
+        + updateQuantity(int) : void
         + getDetails() : String
         + isExpired() : boolean
     }
+
+    class MedicinePills {
+        - id : int
+        - name : String
+        - price : double
+        - expirationDate : Date
+        - stockQuantity : int
+        - pillCount : int
+        + MedicinePills(int, String, double, Date, int, int)
+        + getId() : int
+        + getName() : String
+        + getPrice() : double
+        + getExpirationDate() : Date
+        + getStockQuantity() : int
+        + gettPillCount() : int
+        + setId(int) : void
+        + updateQuantity(int) : void
+        + getDetails() : String
+        + isExpired() : boolean
+    }
+
+    Person <|-- Customer
+    Person <|-- PharmacyWorker
+    Customer "1" o-- "*" Order
+    Order "1" *-- "1" Customer
+    Order "1" *-- "*" Medicine
+    MedicineLiquid ..|> Medicine
+    MedicinePills ..|> Medicine
 }
 
 ' Relationships
