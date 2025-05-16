@@ -12,6 +12,8 @@ public abstract class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public abstract double calculateDiscount(double originalAmount);
+    
     public String getDetails() {
         return "ID: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber;
     }
