@@ -29,11 +29,16 @@ public abstract class Person {
         this.phoneNumber = phoneNumber;
     }
 
+<<<<<<< HEAD
     /**
      * Gets a detailed string representation of the person.
      *
      * @return A string containing the person's ID, Name, Email, and Phone Number.
      */
+=======
+    public abstract double calculateDiscount(double originalAmount);
+    
+>>>>>>> dd421fb1c781900ae90ec8b2a485b8c164849b0a
     public String getDetails() {
         return "ID: " + id + ", Name: " + name + ", Email: " + email + ", Phone: " + phoneNumber;
     }

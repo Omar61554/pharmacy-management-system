@@ -22,10 +22,20 @@ public class PharmacyWorker extends Person {
         this.role = role;
     }
 
+<<<<<<< HEAD
     /**
      * Simulates the action of managing inventory.
      * This method would typically interact with an inventory management system.
      */
+=======
+    @Override
+    public double calculateDiscount(double originalAmount) {
+        // Employees get 20% discount with $100 cap
+        double discount = originalAmount * 0.20;
+        return originalAmount - Math.min(discount, 100);
+    }
+    
+>>>>>>> dd421fb1c781900ae90ec8b2a485b8c164849b0a
     public void manageInventory() {
         System.out.println("Managing inventory...");
         // Placeholder for inventory management logic
