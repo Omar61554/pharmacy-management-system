@@ -81,7 +81,7 @@ To run the application:
 
 ## 🙌 Contributors
 
-- @Omar61554
-- @mohamed-alaa32
-- @MarwanMahmoud02
-- @OmarEmad04
+- [@Omar61554](https://github.com/Omar61554)
+- [@mohamed-alaa32](https://github.com/Mohamed-alaa32)
+- [@MarwanMahmoud02](https://github.com/Marwanmahmoud02)
+- [@OmarEmad04](https://github.com/OmarEmad04)
