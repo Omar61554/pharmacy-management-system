@@ -9,6 +9,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import controller.MedicineController;
+import model.Medicine;
+import dao.MedicineDAO;
 
 public class MedicineControlPage {
 
