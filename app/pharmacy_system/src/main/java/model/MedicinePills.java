@@ -2,7 +2,7 @@ package model;
 import java.util.Date;
 import java.io.Serializable;
 
-public class MedicinePills implements Serializable {
+public class MedicinePills implements Serializable, Medicine {
     private static final long serialVersionUID = 1L;  // Add this version UID
     
     private int id;
@@ -10,7 +10,7 @@ public class MedicinePills implements Serializable {
     private double price;
     private Date expirationDate;
     private int stockQuantity;
-    protected int pillCount;
+    private int pillCount;
 
     public MedicinePills(int id, String name, double price, Date expirationDate, int stockQuantity, int pillCount) {
         this.id = id;
@@ -62,6 +62,18 @@ public class MedicinePills implements Serializable {
     }
 
     public Date getDate() {
+        return expirationDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public Date getExpirationDate() {
         return expirationDate;
     }
 }
