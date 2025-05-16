@@ -56,7 +56,7 @@ Service mode is used for customers to view and purchase medicines.
 <p align="center">
   <a href="https://github.com/user-attachments/assets/ac09b17e-f281-4d17-8d0a-f093e959f1e9
 ">
-    <img src="![GUI](https://github.com/user-attachments/assets/846a5bb7-3fb9-474c-8132-2c4aa9b57e58)" alt="Watch the video" width="600"/>
+    <img src="https://github.com/user-attachments/assets/846a5bb7-3fb9-474c-8132-2c4aa9b57e58" alt="Watch the video" width="600"/>
   </a>
 
 </p>
