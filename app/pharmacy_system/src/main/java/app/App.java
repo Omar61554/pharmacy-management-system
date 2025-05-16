@@ -50,6 +50,18 @@ public class App extends Application {
         primaryStage.setTitle("Medicine Control Page");
     }
 
+    public static void showPharmacyWorkersPage() {
+        PharmacyWorkersPage workersPage = new PharmacyWorkersPage();
+        scene.setRoot(workersPage.getRoot());
+        primaryStage.setTitle("Pharmacy Workers");
+    }
+
+    public static void showOrdersPage() {
+    OrdersPage ordersPage = new OrdersPage();
+    scene.setRoot(ordersPage.getRoot());
+    primaryStage.setTitle("Orders");
+    }
+
     public static void main(String[] args) {
         launch();
     }

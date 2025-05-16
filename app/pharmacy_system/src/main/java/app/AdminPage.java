@@ -48,11 +48,7 @@ public class AdminPage {
         passwordField.setOnAction(e -> loginAction.run());
         backButton.setOnAction(e -> App.showStartPage());
 
-        container.getChildren().addAll(passwordField, loginButton);
-
-        // Back button at bottom right
-
-        container.getChildren().add(backButton);
+        container.getChildren().addAll(passwordField, loginButton, backButton);
         loginRoot.setCenter(container);
 
         // Main Admin Page
@@ -65,7 +61,13 @@ public class AdminPage {
         Button medicineControlBtn = new Button("Medicine Control");
         medicineControlBtn.setOnAction(e -> App.showMedicineControlPage());
 
-        adminContainer.getChildren().add(medicineControlBtn);
+        Button workersBtn = new Button("Pharmacy Workers");
+        workersBtn.setOnAction(e -> App.showPharmacyWorkersPage());
+
+        Button ordersBtn = new Button("Orders");
+        ordersBtn.setOnAction(e -> App.showOrdersPage());
+
+        adminContainer.getChildren().addAll(medicineControlBtn, workersBtn, ordersBtn);
 
         // Back button at bottom right for main page
         Button backBtn = new Button("Back");
