@@ -17,10 +17,18 @@ public class App extends Application {
     private static Scene scene; // Single scene for all pages
     private static Stage primaryStage; // Reference to the primary stage
 
-    @Override
-    public void start(Stage stage) {
-        primaryStage = stage; // Store the primary stage reference
+@Override
+public void start(Stage stage) {
+    primaryStage = stage;
+    // Create the initial scene with an empty root
+    scene = new Scene(new BorderPane(), 640, 480);
+    primaryStage.setScene(scene);
+    showStartPage();
+    primaryStage.show();
+}
 
+
+     private void showStartPage() {
         // Create the start page
         BorderPane startPage = new BorderPane();
         startPage.setTop(createLogo(400, "center")); // Add the logo to the top-left
@@ -37,12 +45,7 @@ public class App extends Application {
         buttonContainer.getChildren().addAll(adminButton, serviceButton);
         startPage.setCenter(buttonContainer);
 
-        // Set the scene
-        scene = new Scene(startPage, 640, 480); // Single scene for all pages
-        stage.setScene(scene);
-        stage.setTitle("Start Page");
-        stage.show();
-        updateScene(startPage, "Start Page"); // Set the initial scene
+        updateScene(startPage, "Start Page");
     }
 
     private void showLoginPage() {
@@ -71,7 +74,7 @@ public class App extends Application {
             String correctPassword = "admin123";
 
             if (enteredPassword.equals(correctPassword)) {
-                showPrimaryPage();
+                showAdminPage();
             } else {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Authentication Failed");
@@ -96,10 +99,10 @@ public class App extends Application {
         updateScene(loginPage, "Login Page");
     }
 
-    private void showPrimaryPage() {
+    private void showAdminPage() {
         // Create the primary page
-        BorderPane primaryPage = new BorderPane();
-        primaryPage.setTop(createLogo(100, "left")); // Add the logo to the top-left
+        BorderPane AdminPage = new BorderPane();
+        AdminPage.setTop(createLogo(100, "left")); // Add the logo to the top-left
 
         VBox container = new VBox(10);
         container.setStyle("-fx-alignment: center; -fx-padding: 20;");
@@ -108,9 +111,9 @@ public class App extends Application {
         backButton.setOnAction(event -> showStartPage()); // Go back to the start page
 
         container.getChildren().add(backButton);
-        primaryPage.setCenter(container);
+        AdminPage.setCenter(container);
 
-        updateScene(primaryPage, "Primary Page");
+        updateScene(AdminPage, "Primary Page");
     }
 
     private void showServicePage() {
@@ -130,25 +133,7 @@ public class App extends Application {
         updateScene(servicePage, "Service Page");
     }
 
-    private void showStartPage() {
-        // Create the start page
-        BorderPane startPage = new BorderPane();
-        startPage.setTop(createLogo(100, "left")); // Add the logo to the top-left
-
-        VBox buttonContainer = new VBox(10);
-        buttonContainer.setStyle("-fx-alignment: center; -fx-padding: 10;");
-
-        Button adminButton = new Button("Admin");
-        Button serviceButton = new Button("Service");
-
-        adminButton.setOnAction(event -> showLoginPage());
-        serviceButton.setOnAction(event -> showServicePage());
-
-        buttonContainer.getChildren().addAll(adminButton, serviceButton);
-        startPage.setCenter(buttonContainer);
-
-        updateScene(startPage, "Start Page");
-    }
+   
 
     private void updateScene(BorderPane root, String title) {
         // Update the scene's root and the window title
